@@ -1,0 +1,133 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-signals/core-signals.html">
+
+
+<polymer-element name="console-log">
+  <template>
+    <style>
+      :host {}
+
+      /* Console Window - Wrapper */
+      div#console {
+          width: 380px !important;
+          height: 54px !important;
+          display: block;
+          position: absolute;
+          left: 60px;
+          top: 4px;
+      }
+
+      /* Console Window - Backing */
+      .console-bg {
+          background-color: #282828;
+          width: 386px;
+          height: 55px;
+          -webkit-transform: skewX(-20deg);
+          -moz-transform:skewX(-20deg);
+          -o-transform:skewX(-20deg);
+          transform:skewX(-20deg);
+          box-shadow: 1px 0px #000, 1px 1px #555, 1px -1px #777, -1px -1px #555, -1px 1px #555;
+      }
+
+      /* Console Window - Text body : POST YOUR TEXT HERE */
+      .console-log {
+          position: absolute;
+          top: 15px;
+          left: 12px;
+          width: 363px;
+          height: 55px;
+          color:#10D700;
+          overflow:auto;
+          font-family:arial;
+          opacity: 0
+          transition:All 1s ease; 
+      }
+
+      .myTransitionOut {
+        transform: translate(181px, 0px);
+        transition: opacity 1s ease-in-out;
+        opacity: 0;
+        transition:All 0.4s ease;
+      }
+    </style>
+    <!-- ENTER MY NEW TEMPLATE CONTENT-->
+
+      <core-signals on-core-signal-artruecommand="{{onArTrueCommand}}"></core-signals>
+
+
+
+      <!-- On Screen Console Log -->
+      <div id="console" >
+          <div class="console-bg"></div>
+          <div id="console-wrapper" class="classname">
+              <template repeat="{{msg in messages}}">
+                  <span id="commandTexts" class="console-log">{{msg.txt}}</span>
+              </template>         
+          </div>
+      </div>
+
+
+  </template>
+  <script>
+    Polymer('console-log', {
+
+        messages: [{"txt":"No commands"}],
+
+
+        domReady: function() {},
+
+
+         onArTrueCommand: function(e, detail, sender) {
+
+            switch (detail.dir) {
+                case 'forward':
+                    this.messages.push({"txt" : "Drone: Forward"});
+                    break;
+                case 'back':
+                    this.messages.push({"txt" : "Drone: Back"});
+                    break;
+                case 'left':
+                    this.messages.push({"txt" : "Drone: Left"});
+                    break;
+                case 'right':
+                    this.messages.push({"txt" : "Drone: Right"});
+                    break;
+                case 'rotateCounter':
+                    this.messages.push({"txt" : "Drone: Rotate counter"});
+                    break;
+                case 'rotateClock':
+                    this.messages.push({"txt" : "Drone: Rotate clockwise"});
+                    break;
+                case 'down':
+                    this.messages.push({"txt" : "Drone: Down"});
+                    break;
+                case 'up':
+                    this.messages.push({"txt" : "Drone: Up"});
+                    break;
+                case 'liftOff':
+                    this.messages.push({"txt" : "Drone: Lifting off"});
+                    break;
+                case 'land':
+                    this.messages.push({"txt" : "Drone: Landing"});
+                    break;
+                default:
+                this.messages.push({"txt" : "Drone: No action"});
+            } //end of switch
+
+            // console.log("onArTrueCommand has been received!!!! CONSOLE-LOG" + JSON.stringify(detail));
+        },
+
+
+        messagesChanged: function(data) {
+          console.log("new message was added");
+
+          var index = data[0].index; //grab index
+          var prevElm = this.$['console-wrapper'].children[index]; //this is the previous element
+          prevElm.className = [prevElm.className,' ', 'myTransitionOut'].join('').trim(); //apply transition class to previous element
+
+        }
+
+
+    });
+  </script>
+</polymer-element>

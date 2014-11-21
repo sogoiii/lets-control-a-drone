@@ -1,0 +1,76 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+  
+<polymer-element name="socket-status">
+  <template>
+    <style>
+      :host {
+
+      }
+      #indicator {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        
+      }
+
+      .isDisconnected {
+        background-color: red;
+      }
+
+      .isConnected {
+        background-color: green;
+      }
+
+      #statusthingy {
+        color: orange;
+        margin: 15px 0 0 15px;
+      }
+
+    </style>
+    <!-- ENTER MY NEW TEMPLATE CONTENT-->
+
+    <core-signals on-core-signal-socketconnected="{{onServerConnected}}"></core-signals>
+    <core-signals on-core-signal-socketdisconnected="{{onServerDisconnected}}"></core-signals>
+
+
+    <!-- Status indicator -->
+    <div horizontal layout>
+      <div id="indicator"></div>
+
+      <div id="statusthingy">No connection to socket.io</div>   
+    </div>
+    
+
+  </template>
+  <script>
+    Polymer("socket-status", {
+
+      //previosusly defined classes
+      isOn: 'isConnected',
+      isOff: 'isDisconnected',
+
+
+      ready: function() {
+        //set default status color
+        this.$.indicator.className = [this.$.indicator.className,' ', this.isOff].join('').trim();
+      },
+
+      onServerConnected: function() {
+        console.log('[STATUS] connected to server via socket.io');
+        //Add class to show status is good
+        this.$.indicator.className = [this.$.indicator.className,' ', this.isOn].join('').trim();
+
+        //you can also change the inner html string (comment out to see that string does not change)
+        this.$.statusthingy.innerText = "Connected to Socket.io";
+      },
+
+      onServerDisconnected : function() {
+        console.log('[STATUS] disconnected from socket.io server');
+        //remove class to show status is bad
+        this.$.indicator.classList.remove(this.isOn);
+      }
+
+
+    });
+  </script>
+</polymer-element>

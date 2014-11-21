@@ -1,0 +1,58 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+
+<polymer-element name="control-btns" class="control-btns">
+  <template>
+      <link rel="stylesheet"  href="../stylesheets/control-btns.css">
+    <style>
+      :host {
+
+      }
+
+      .btn {
+
+      }
+    </style>
+    <!-- ENTER MY NEW TEMPLATE CONTENT-->
+
+      <!-- THESE PAPER BUTTONS ARE JUST FOR SHOW-->
+<!--  <paper-button raised>button</paper-button>
+      <paper-button raised class="colored">colored</paper-button>
+      <paper-button raised disabled>disabled</paper-button> -->
+
+
+      <!-- These are currently for debugging. I will eventually add real buttons-->
+      <div class="select-btn-box">
+          <button class="btn liftoff"   on-click="{{masterSaysLiftOff}}">Lift Off!</button>
+          <button class="btn slave"     on-click="{{disableMasterControl}}">Enable Slave Control</button>
+          <button class="btn liftoff"   on-click="{{masterSaysLand}}">Land!</button>
+      </div>
+
+
+
+  </template>
+  <script>
+    Polymer("control-btns", {
+
+
+        //button events
+
+        masterSaysLiftOff: function() {
+          console.log("Master says liftoff");
+           this.fire('core-signal', {name: 'sendsocket', data: {event:"overrideCommand", data: {dir: 'liftOff'} } });
+        },
+
+        masterSaysLand: function() {
+          console.log("Master says land");
+          this.fire('core-signal', {name: 'sendsocket', data: {event: "overrideCommand", data: {dir: 'land'}}});
+        },
+
+        disableMasterControl: function() {
+          console.log("Going to let slaves control quadcoptor");
+          this.fire('core-signal', {name: 'sendsocket', data: {event: "overrideEnable", data: {slavesAllowed: true}}});     
+        }
+
+    });
+  </script>
+</polymer-element>

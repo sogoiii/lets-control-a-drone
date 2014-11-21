@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    <title>Master Controller</title>
+
+    <script src="./bower_components/platform/platform.js"></script>
+    <link rel="import" href="./d-pad-global.html">
+    <link rel="import" href="./elements/control-btns.html">
+    <link rel="import" href="./elements/console-log.html">
+    <link rel="import" href="./elements/socket-status.html">
+    <link rel="import" href="./elements/socket-io/socket-io-global.html">
+</head>
+
+<body unresolved fullbleed>
+
+    <div vertical layout style="height:100%">
+
+        <div id="navBar" style="background-color:#ccc; opacity: 1; height: 70px; text-align:center; box-shadow: 0px -2px 100px #000; border-bottom: 3px solid #535353;">
+            <img style="height:100%;" src="/img/Quad_Control.png" />
+        </div>
+
+        <div id="contentBody" flex>
+            <control-btns></control-btns>
+        </div>
+        
+        <div id="controllers">
+
+          <socket-status></socket-status>
+
+            <div id="container" class="control-container" horizontal around-justified layout>
+                <link rel="stylesheet" href="../stylesheets/dpad.css">
+
+                <div class="bg-main-panel bg-pane"></div>
+                <div class="bg-left-edge bg-pane"></div>
+                <div class="bg-bottom-edge bg-pane"></div>
+
+                <!-- Left Joystick -->
+                <d-pad-global class="left-stick stick" inputKeys='
+                              {
+                                "a" :{
+                                  "dir": "left",
+                                  "command" : "left"
+                                },
+                                "s" :{
+                                  "dir": "down",
+                                  "command" : "back"
+                                },
+                                "d" :{
+                                  "dir": "right",
+                                  "command" : "right"
+                                },
+                                "w" :{
+                                  "dir": "up",
+                                  "command" : "forward"
+                                }     
+                              }'>
+                </d-pad-global>
+
+                <!-- On Screen Console Log -->
+                <console-log></console-log>
+
+                <!-- Right JoyStick -->
+                <d-pad-global class="right-stick stick" inputKeys='{
+                                "j" :{
+                                  "dir": "left",
+                                  "command" : "rotateCounter"
+                                },
+                                "k" :{
+                                  "dir": "down",
+                                  "command" : "down"
+                                },
+                                "l" :{
+                                  "dir": "right",
+                                  "command" : "rotateClock"
+                                },
+                                "i" :{
+                                  "dir": "up",
+                                  "command" : "up"
+                                }     
+                              }'>
+                </d-pad-global>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <socket-io-global id="socketIo" socketUrl="http://radiant-anchorage-4689.herokuapp.com" listenTo=["ArTrueCommand","dpadCommand"] autoConnect="true">
+    </socket-io-global>
+
+    <script type="text/javascript">
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color:#333333;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.btn {
+    width: 140px;
+    padding: 5px 4px;
+    margin-bottom: 6px;
+    color: #EBEBEB;
+    background-color: #7B7B7B;
+    border: none;
+    position: relative;
+    box-shadow: 1px 1px 1px #000,
+               -1px -1px 0px #5D5D5D;
+}
+
+.control-container {
+    background-color:#0f0;
+}

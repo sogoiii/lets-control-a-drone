@@ -1,0 +1,142 @@
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link rel="import" href="./bower_components/core-signals/core-signals.html">
+<link rel="import" href="./elements/keypress-js.html">
+<script src="../bower_components/lodash/dist/lodash.js"></script>
+
+
+<polymer-element name="d-pad-global" attributes="inputKeys">
+    <template>
+        <link rel="stylesheet" href="../stylesheets/dpad.css">
+        <style>
+        :host {}
+        </style>
+
+        <div on-key-down="{{pressedKey}}" on-key-up="{{depressedKey}}">
+            <!-- put event grabbers here instead at top of element-->
+            <keypress-js wantKeys={{inputKeys}}></keypress-js>
+        </div>
+
+        <!-- Global event handlers to be listening to-->
+        <core-signals on-core-signal-socketconnected="{{onServerConnected}}"></core-signals>
+        <core-signals on-core-signal-artruecommand="{{onArTrueCommand}}"></core-signals>
+        <core-signals on-core-signal-start="{{startDpad}}"></core-signals>
+
+
+        <!-- This is the joystick-->
+        <div id="controller-btn-wrapper">
+            <div id="stick" class=""></div>
+        </div>
+
+
+    </template>
+    <script>
+    Polymer("d-pad-global", {
+
+
+        ready: function() {
+            // console.log(this.inputKeys);
+        },
+
+
+        //press Keyboard events
+
+        pressedKey: function(message) {
+            // console.log("pressed key: "+message.detail.dir);
+            this.sendCommandToApi(message.detail);
+
+            switch (message.detail.dir) {
+                case "up":
+                    this.addClass({
+                        className: 'move-up'
+                    });
+                    break;
+                case "down":
+                    this.addClass({
+                        className: 'move-down'
+                    });
+                    break;
+                case "right":
+                    this.addClass({
+                        className: 'move-right'
+                    });
+                    break;
+                case "left":
+                    this.addClass({
+                        className: 'move-left'
+                    });
+                    break;
+                default:
+                    console.log("ERROR: pressed: direction not given!");
+            } //end of switch
+        }, //end of pressedKey
+
+
+        depressedKey: function(message) {
+
+            switch (message.detail.dir) {
+                case "up":
+                    this.removeClass({
+                        className: 'move-up'
+                    });
+                    break;
+                case "down":
+                    this.removeClass({
+                        className: 'move-down'
+                    });
+                    break;
+                case "right":
+                    this.removeClass({
+                        className: 'move-right'
+                    });
+                    break;
+                case "left":
+                    this.removeClass({
+                        className: 'move-left'
+                    });
+                    break;
+                default:
+                    console.log("ERROR: Depressed: direction not given!");
+            } //end of switch
+        }, //end of depressedKey
+
+
+
+        addClass: function(options) {
+            this.$.stick.className = [this.$.stick.className,' ', options.className].join('').trim();
+        },
+
+        removeClass: function(options) {
+            this.$.stick.classList.remove(options.className);
+        },
+
+        //this is here because browser sends many requests
+        sendCommandToApi: _.throttle(function(options) {
+            console.log("going to send command: " + options.command);
+            this.fire('core-signal', {
+                name: 'sendsocket',
+                data: {
+                    event: "dpadCommand",
+                    data: options.command
+                }
+            });
+        }, 250),
+
+
+
+        //Core-events 
+
+        startDpad: function(e, detail, sender) {
+            //change class
+        },
+
+        onServerConnected: function(e, detail, sender) {
+            console.log("Socket.io is now connected.");
+        },
+
+        onArTrueCommand: function(e, detail, sender) {
+            console.log("onArTrueCommand has been received!!!! " + JSON.stringify(detail));
+        }
+
+    });
+    </script>
+</polymer-element>

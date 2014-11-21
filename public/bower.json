@@ -1,0 +1,27 @@
+{
+  "name": "quadCoptorController",
+  "version": "0.0.0",
+  "authors": [
+    "Angello Pozo <Angello.pozo@gmail.com>"
+  ],
+  "description": "controll a quadcoptor from browser",
+  "main": "app.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.4.2",
+    "core-elements": "Polymer/core-elements#~0.4.2",
+    "lodash": "~2.4.1",
+    "socket.io-client": "1.1.0",
+    "paper-button": "Polymer/paper-button#~0.4.2",
+    "Keypress" : "2.0.3"
+
+  }
+}

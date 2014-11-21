@@ -1,0 +1,279 @@
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link rel="import" href="./bower_components/socket-io/socket-io.html">
+<link rel="import" href="./elements/keypress-js.html">
+<script src="../bower_components/lodash/dist/lodash.js"></script>
+
+<polymer-element name="d-pad" attributes="inputKeys">
+    <template>
+      <style>
+        :host {
+          
+        }
+        #stick {
+          height: 100px;
+          width: 100px;
+          background-color: red;
+          position: relative;
+          -webkit-transition: all .1s;
+          transition: all .1s;
+        }
+        #right {
+          height: 100px;
+          width: 100px;
+          background-color: blue;
+          position: relative;
+        }
+        #left {
+          height: 100px;
+          width: 100px;
+          background-color: green;
+          position: relative;
+        }
+        #down {
+          height: 100px;
+          width: 100px;
+          background-color: orange;
+          position: relative;
+        }
+
+
+        .stick {
+            /*position: absolute;*/
+
+
+/*            transition: all 2s ease-in-out;
+            -webkit-transition: all 2s ease-in-out; 
+            -moz-transition: all 2s ease-in-out; 
+            -o-transition: all 2s ease-in-out;*/
+            
+
+        }
+
+
+
+        .move-up {
+          top: -100px;
+        }
+
+        .move-right {
+          left: 100px;
+        }
+
+        .move-left {
+          left: -100px;
+        }
+        .move-down {
+          top: 100px;
+        }
+
+/*        #controller-btn-wrapper:hover  .move-right {
+            transform: translate(100px,0);
+            -webkit-transform: translate(100px,0); 
+            -o-transform: translate(100px,0); 
+            -moz-transform: translate(100px,0); 
+            /*animation: move 3s;
+        }*/
+
+
+/*        @keyframes slidein {
+            50% {
+               transform: translate(100px, 0px);
+            }
+        }
+*/
+
+/*        animate {
+          position: absolute;
+          top: 200px;
+          left: 30px;
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          background: red;
+          
+          animation: move 3s infinite;
+        }
+
+        @keyframes move {
+          50% {
+              transform: translate(100px,0);
+              -webkit-transform: translate(100px,0); 
+              -o-transform: translate(100px,0); 
+              -moz-transform: translate(100px,0); 
+          }
+        }*/
+
+
+      </style>
+
+      <div on-key-down="{{pressedKey}}" on-key-up="{{depressedKey}}">
+          <keypress-js wantKeys={{inputKeys}} ></keypress-js>
+      </div>
+      
+
+<!--       <socket-io id="socketIo" socketUrl="http://localhost:3000" 
+       connected={{connected}} listenTo=["message","customEvent"] receiveData={{fromServer}} toServer={{sendServer}} outEventName={{outEventName}} autoConnect="{{autoConnect}}">
+      </socket-io> -->
+
+
+
+
+      <div id="controller-btn-wrapper" >
+            <div id="stick" class=""></div>
+      </div>
+
+      <button on-click="{{sendEvent}}">Send</button>
+
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+
+      <button on-click="{{masterCommand}}">MASTER COMMAND</button>
+
+
+    </template>
+    <script>
+      Polymer("d-pad", {
+        outEventName: "customEvent",
+        // fromServer: "inMSG",
+        // sendServer: null,
+        // connected: '',
+        autoConnect: true,
+        messages: [],
+        clients: {},
+        observe: {
+            'user.name': 'userChanged',
+            'user.color': 'userChanged'
+          },
+        ready:function(){
+          
+          console.log(this.inputKeys);
+
+          // var redBox = this.$.stick;
+
+
+          // redBox.addEventListener('s-io-connected', function() {
+          //   console.log('box can hear key-down');
+          // });
+
+          // redBox.addEventListener('dekey-down', function() {
+          //   console.log('box can hear dekey-down');
+          // });
+
+
+        },
+
+        //press Keyboard events
+
+        pressedKey: function(message) {
+          console.log("pressed key: "+message.detail.dir);
+          this.sendCommandToApi(message.detail.dir);
+
+          switch(message.detail.dir){
+              case "up":
+                this.addClass({className: 'move-up'});
+                break;
+              case "down":
+                this.addClass({className: 'move-down'});
+                break;
+              case "right":
+                this.addClass({className: 'move-right'});
+                break;
+              case "left":
+                this.addClass({className: 'move-left'});
+                break;
+              default:
+                console.log("ERROR: pressed: direction not given!");
+          }//end of switch
+        },//end of pressedKey
+
+
+        depressedKey: function(message){
+
+          switch(message.detail.dir){
+              case "up":
+                this.removeClass({className: 'move-up'});
+                break;
+              case "down":
+                this.removeClass({className: 'move-down'});
+                break;
+              case "right":
+                this.removeClass({className: 'move-right'});
+                break;
+              case "left":
+                this.removeClass({className: 'move-left'});
+                break;
+              default:
+                console.log("ERROR: Depressed: direction not given!");
+          }//end of switch
+        },//end of depressedKey
+
+
+
+        addClass: function(options){
+          this.$.stick.className = [this.$.stick.className, ' ', options.className].join('');
+        },
+
+        removeClass: function(options){
+          this.$.stick.classList.remove(options.className);
+        },
+
+        //this is here because browser sends many requests
+        sendCommandToApi: _.throttle(function(data) { 
+          console.log("going to send command for " + data);
+        }, 500),
+
+        // sendCommandToApi:function(data) { 
+        //   // console.log("going to send command for " + data);
+        // }, 
+
+
+
+        //socket-io Methods
+
+
+        sendEvent: function() {
+          console.log("i clicked my send Event");
+          this.sendServer = {event:"customEvent", data: 'baseMessage'};
+        },
+
+        fromServerChanged:function(data) {
+            console.log("server gave me = " + JSON.stringify(this.fromServer.data));
+        },
+
+
+        masterCommand: function() {
+          console.log("going to send my true master command");
+          this.sendServer = {event: "ArTrueCommand", data: "this is my true command!!!!!!"};
+        },
+
+
+        //api
+        connect:function(){
+          // this.$.socketIo.connect();
+        },
+
+        // onMessageKeydown:function(event) { 
+        //   if(event.keyCode && event.keyCode==13) this.sendMessage();
+        // },
+
+        //Attribute change handlers
+        connectedChanged:function() {
+          console.log("connected changed", this.connected);
+        },
+
+
+
+        userChanged:function() {
+          // if(this.connected) this.toServer = {event:"userChanged",data:{user:this.user}};
+        },
+
+        connectedChanged:function() {
+          // if(this.connected){this.toServer = {event:"userChanged",data:{user:this.user}};}
+        }
+      });
+    </script>
+  </polymer-element>

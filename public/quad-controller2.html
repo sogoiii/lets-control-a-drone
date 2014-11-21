@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>Quadcoptor Controller</title>
+      
+      <script src="./bower_components/platform/platform.js"></script>
+      <link rel="import" href="./d-pad-global.html">
+      <link rel="import" href="./elements/socket-io/socket-io-global.html">
+
+      <style>
+          d-pad-global {
+            height: 250px;
+            width: 250px;
+            left:100px;
+            top: 100px;
+            position: absolute;
+          }
+          chat-app {
+            height: 250px;
+            width: 250px;
+            left:100px;
+            top: 100px;
+            position: absolute;
+          }
+      </style>
+
+
+  </head>
+<body unresolved>
+  <div id="container">
+
+  <d-pad-global inputKeys='{"a": "left", "s": "down", "w" : "up", "d" : "right"}'> </d-pad-global>
+
+  <br></br>
+  <br></br>
+  <br></br>
+  <br></br>
+  <br></br>
+
+  <div style="left: 400px; position: absolute">
+      <d-pad-global inputKeys='{"j": "left", "k": "down", "i" : "up", "l" : "right"}'> </d-pad-global>
+  </div>
+  
+
+   <!-- <d-pad-global inputKeys='{"a": "left", "s": "down", "w" : "up", "d" : "right"}'></d-pad-global> -->
+
+
+    <socket-io-global id="socketIo" socketUrl="http://localhost:4000" 
+     connected={{connected}} listenTo=["message","customEvent"] receiveData={{fromServer}} toServer={{sendServer}} outEventName={{outEventName}} autoConnect="true">
+    </socket-io-global>
+
+  </div>
+
+
+
+    <script type="text/javascript">
+        // var container = document.querySelector('#container');
+        // var details = null;
+        // container.addEventListener('s-io-connected', function(e) {
+        //   // alert('outside: Said hi to ' + e.detail.name + ' from ' + e.target.localName);
+        //   console.log("s-io-connected recieved from socket.io");
+        //   details = e.detail;
+        // });
+
+
+        //   [].forEach.call(container.querySelectorAll('d-pad-global'), function(el, i) {
+        //     el.fire('s-io-connected', {"some": "data"});
+        //   });
+
+
+
+    </script>
+
+</body>
+</html>

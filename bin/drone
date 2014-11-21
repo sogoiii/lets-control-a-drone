@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+var debug = require('debug')('quadCoptorController');
+var app = require('../app');
+
+
+app.set('port', process.env.PORT || 6000);
+
+var server = app.listen(app.get('port'), function() {
+  console.log('[DRONE] Express server listening on port ' + server.address().port);
+});
+
+//Star IO server and pass it to other required methods
+var io = require('socket.io').listen(server);
+var droneRedis = require('../droneRedis');
+
+
+

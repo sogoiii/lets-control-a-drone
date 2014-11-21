@@ -1,0 +1,73 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<script src="../bower_components/Keypress/keypress.js"></script>
+
+
+<polymer-element name="keypress-js" attributes="wantKeys">
+    <template>
+        <style>
+        :host {}
+        </style>
+        <!-- ENTER MY NEW TEMPLATE CONTENT-->
+
+
+    </template>
+    <script>
+    Polymer("keypress-js", {
+
+        wantKeys: [],
+
+        ready: function() {
+            this.listener = new window.keypress.Listener();
+        },
+
+        attached: function() {
+            this.wantKeys = JSON.parse(this.wantKeys); //parse the input from element
+
+            for (keySet in this.wantKeys) {
+                this.createKeypress({
+                    key: keySet,
+                    data: this.wantKeys[keySet]
+                });
+            }
+        },
+
+        createKeypress: function(options) {
+            var self = this;
+
+            this.listener.register_combo({
+                "keys": options.key,
+                "on_keydown": this.genKeyDownFunction(options),
+                "on_keyup": this.genKeyUpFunction(options),
+                "this": self,
+                "prevent_repeat": false, //todo make this an option
+                "is_exclusive": false, //todo make this an option
+                "is_sequence": false, //todo make this an option
+                "is_solitary": false, //todo make this an option
+            });
+        },
+
+
+        genKeyDownFunction: function(options) {
+            return function() {
+                // console.log("key-down: direction = " + options.key);
+                this.fire('key-down', {
+                    "dir": options.data.dir,
+                    "command" : options.data.command
+                });
+            }
+        },
+
+        genKeyUpFunction: function(options) {
+            return function() {
+                // console.log("key-up: direction = " + options.key);
+                this.fire('key-up', {
+                    "dir": options.data.dir,
+                    "command" : options.data.command
+                });
+            }
+        }
+
+
+    });
+    </script>
+</polymer-element>
