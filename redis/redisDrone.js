@@ -1,7 +1,7 @@
-var redis_socketIO = require("socket.io-redis"),
-    redis = require('redis'),
-    myArClient = require('./lib/arCommands'),
-    config = require('./config');
+var redis_socketIO = require("socket.io-redis");
+var redis = require('redis');
+var myArClient = require('../lib/arCommands');
+var config = require('../config');
 
 
 var environment = config.environment;
@@ -30,15 +30,14 @@ redisSubscriber.subscribe('ArDronWouldYouKindly');
 redisSubscriber.subscribe('enableSlaves');
 
 redisSubscriber.on('message', function(channel, message) {
-    var command;
     switch (channel) {
         case 'ArDronWouldYouKindly':
-            command = JSON.parse(message);
+            var command = JSON.parse(message);
             console.log("received command: " + JSON.stringify(command));
             myArClient.doCommand(command);
             break;
         case 'enableSlaves':
-            command = JSON.parse(message);
+            var command = JSON.parse(message);
             console.log("AR DRONE WILL ENABLE SLAVES");
             myArClient.enableSlaves(command);
             break;

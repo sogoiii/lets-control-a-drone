@@ -24,6 +24,10 @@
     "bower": "1.3.12"
   },
   "scripts" : {
+    "start": "node easyStart",
+    "slave": "node bin/slave",
+    "master": "node bin/master",
+    "drone" : "node bin/drone",
     "postinstall" : "cd public && bower install"
   }
 }

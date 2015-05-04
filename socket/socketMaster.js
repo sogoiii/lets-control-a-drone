@@ -1,8 +1,8 @@
-var redis_socketIO = require("socket.io-redis"),
-    redis = require('redis'),
-    config = require('./config'),
-    aggregator = require('./lib/aggregator'),
-    StringDecoder = require('string_decoder').StringDecoder;
+var redis_socketIO = require("socket.io-redis");
+var redis = require('redis');
+var config = require('../config');
+var aggregator = require('../lib/aggregator');
+var StringDecoder = require('string_decoder').StringDecoder;
 
 var environment = config.environment;
 var port = config.redis[environment].port;
@@ -37,12 +37,9 @@ redisSubscriber.subscribe('dpadCommand');
   I left the redisSubscriber on the inside just to show that you can emit from here if you wanted to [actually its so this only works if i have master controller loaded]
 ==================================================*/
 redisSubscriber.on('message', function(channel, message) {
-    console.log("SOCKET RECEIVED PUBSUB EVENT!!!!-1");
     console.log(channel);
     var decoder = new StringDecoder('utf8');
     console.log(decoder.write(message));
-    // console.log(message);
-    console.log("---------------");
 
     if (channel === "dpadCommand") {
         console.log("DPAD COMMAND ON MASTER");
@@ -61,9 +58,6 @@ module.exports = function(io) {
     io.adapter(redis_socketIO({
         host: host,
         port: port,
-        // host: config.redis.host,
-        // port: config.redis.port,
-        // auth_pass: 'zUYjmimwBF3zWsdN',
         pubClient: redisPublisher,
         subClient: redisSubscriber
     }));

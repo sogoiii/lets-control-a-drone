@@ -32,7 +32,7 @@ Client Side Setup:
 
 Connecting to ArDrone:
 ---------
-I assume you are in root of the project within the terminal.
+On your computer you need to install and use the ardrone-wpa2 repo from github.
 
 1. download [ardrone-wpa2](https://github.com/daraosn/ardrone-wpa2) from github
 2. Connect battery to ardrone
@@ -46,7 +46,8 @@ Running the project:
 ----------
 Once you are all setup call the following:
 
-1. node easyStart.js
+1. connect to the ardrone wifi network
+2. node easyStart.js
 
 
 Environments:

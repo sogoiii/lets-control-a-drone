@@ -1,6 +1,6 @@
-var redis_socketIO = require("socket.io-redis"),
-    redis = require('redis'),
-    config = require('./config');
+var redis_socketIO = require("socket.io-redis");
+var redis = require('redis');
+var config = require('../config');
 
 
 
@@ -18,7 +18,6 @@ var redisSubscriber = redis.createClient(port, host, { //subscriber
     auth_pass: pass
 });
 
-
 var redisPublisher = redis.createClient(port, host, { //publisher
     "return_buffers": true,
     auth_pass: pass
@@ -35,9 +34,6 @@ module.exports = function(io) {
     io.adapter(redis_socketIO({
         host: host,
         port: port,
-        // host: config.redis.host,
-        // port: config.redis.port,
-        // auth_pass: 'zUYjmimwBF3zWsdN'
         pubClient: redisPublisher,
         subClient: redisSubscriber
     }));

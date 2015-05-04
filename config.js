@@ -11,14 +11,14 @@ var config = {
     environment: process.env.environment || 'dev',
     redis: {
         dev: {
-            host: 'localhost',
-            port: 6379,
-            password: null
+            host: process.env.REDIS_HOST || 'localhost',
+            port: process.env.REDIS_PORT || 6379,
+            password: process.env.REDIS_PASS || ''
         },
         prod: {
-            host: process.env.REDIS_HOST || 'localhost' || '<redis host>',
-            port: process.env.REDIS_PORT || 6379 || '<redis port>',
-            password: process.env.REDIS_PASS || '' ||'<redis password>'
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT,
+            password: process.env.REDIS_PASS
         }
     }
 };

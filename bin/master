@@ -4,12 +4,12 @@ var app = require('../app');
 var config = require('../config');
 var port = config.ports.master;
 
-app.set('port', port);
 
+app.set('port', port);
 var server = app.listen(port, function() {
   console.log('[MASTER] Express server listening on port ' + port);
 });
 
 //Star IO server and pass it to other required methods
 var io = require('socket.io').listen(server);
-var mysockets = require('../masterSockets')(io);
+var mysockets = require('../socket/socketMaster')(io);
