@@ -4,20 +4,23 @@ var redis_socketIO = require("socket.io-redis"),
     config = require('./config');
 
 
-var environment = process.env.environment || 'dev';
+var environment = config.environment;
+var port = config.redis[environment].port;
+var host = config.redis[environment].host;
+var pass = config.redis[environment].password;
+
 
 /*==================================================
   Redis clients created
 ==================================================*/
-var redisSubscriber = redis.createClient(config.redis[environment].port, config.redis[environment].host, { //subscriber
+var redisSubscriber = redis.createClient(port, host, { //subscriber
     "return_buffers": true,
-    auth_pass: config.redis[environment].password
+    auth_pass: pass
 });
 
-
-var redisPublisher = redis.createClient(config.redis[environment].port, config.redis[environment].host, { //publisher
+var redisPublisher = redis.createClient(port, host, { //publisher
     "return_buffers": true,
-    auth_pass: config.redis[environment].password
+    auth_pass: pass
 });
 
 /*==================================================
@@ -31,7 +34,7 @@ redisSubscriber.on('message', function(channel, message) {
     switch (channel) {
         case 'ArDronWouldYouKindly':
             command = JSON.parse(message);
-            console.log("Drone received command: " + JSON.stringify(command));
+            console.log("received command: " + JSON.stringify(command));
             myArClient.doCommand(command);
             break;
         case 'enableSlaves':

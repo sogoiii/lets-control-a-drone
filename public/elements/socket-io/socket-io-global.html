@@ -234,6 +234,7 @@ TODO: should we expose some event so parsing the "receiveData" is optional (for 
             },
 
             onMessageRecieved: function(event, msg) {
+                console.log("onMessageRecieved core-signal");
                 this.fire('core-signal', { //Limitation of core-signal is that event names must be all lowercase
                     name: event.toLowerCase(), //change this with event and declare core-event listener for evnts
                     data: msg
@@ -241,6 +242,8 @@ TODO: should we expose some event so parsing the "receiveData" is optional (for 
             },
 
             emitSocketEvent: function(e, detail, sender) {
+                console.log("detail.data");
+                console.log(detail);
                 this.emit(detail.event, detail.data);
             },
 

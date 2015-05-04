@@ -3,9 +3,18 @@ Purpose:
 ---------
 Demonstrates a controller that is connected to an ardrone. 
 
+Enviornment variables:
+--------
+
+1. REDIS_PORT
+2. REDIS_HOST
+3. REDIS_PASS
+4. PORT_SLAVE
+5. PORT_MASTER
+6. PORT_DRONE
 
 
-Setup:
+Sever Setup:
 ---------
 1. git clone project
 2. cd into project
@@ -13,7 +22,12 @@ Setup:
 4. bower install in public directory
 5. node bin/slave to start up controller page
 6. navigate to http://localhost:3000/quad-controller.html to view page
+7. If you to be the master: navigate to http://localhost:7000/master-control.html to view page
 
+Client Side Setup:
+---------
+1. Change socketURL in quad-controller.html line 86 to your SLAVE server
+2. Change socketURL in master-controller.html line 89 to your MASTER server
 
 
 Connecting to ArDrone:
@@ -27,6 +41,12 @@ I assume you are in root of the project within the terminal.
 5. [in terminal - only do once] sh bin/ardrone-wpa2/script/install
 6. [in terminal - every time] sh bin/ardrone-wpa2/script/connect "&lt;network name&gt;" -p "&lt;password&gt;" -a "&lt;new ip of ardrone&gt;"
 
+
+Running the project:
+----------
+Once you are all setup call the following:
+
+1. node easyStart.js
 
 
 Environments:

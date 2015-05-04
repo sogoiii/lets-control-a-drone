@@ -4,20 +4,23 @@ var redis_socketIO = require("socket.io-redis"),
     aggregator = require('./lib/aggregator'),
     StringDecoder = require('string_decoder').StringDecoder;
 
-var environment = process.env.environment || 'dev';
+var environment = config.environment;
+var port = config.redis[environment].port;
+var host = config.redis[environment].host;
+var pass = config.redis[environment].password;
+
 
 /*==================================================
   Redis clients created
 ==================================================*/
-var redisSubscriber = redis.createClient(config.redis[environment].port, config.redis[environment].host, { //subscriber
+var redisSubscriber = redis.createClient(port, host, { //subscriber
     "return_buffers": true,
-    auth_pass: config.redis[environment].password
+    auth_pass: pass
 });
 
-
-var redisPublisher = redis.createClient(config.redis[environment].port, config.redis[environment].host, { //publisher
+var redisPublisher = redis.createClient(port, host, { //publisher
     "return_buffers": true,
-    auth_pass: config.redis[environment].password
+    auth_pass: pass
 });
 
 
@@ -56,8 +59,8 @@ module.exports = function(io) {
       IO config
     ==================================================*/
     io.adapter(redis_socketIO({
-        host: 'localhost',
-        port: 6379,
+        host: host,
+        port: port,
         // host: config.redis.host,
         // port: config.redis.port,
         // auth_pass: 'zUYjmimwBF3zWsdN',
@@ -81,7 +84,7 @@ module.exports = function(io) {
           dpadCommands: these are what all slaves give. these are aggregated into a true command
         ==================================================*/
         socket.on('dpadCommand', function(direction) {
-            console.log("[MASTER] dpadCommand received: " + JSON.stringify(direction));
+            console.log("dpadCommand received: " + JSON.stringify(direction));
 
             socket.to('ArCommands').emit('ArTrueCommand', {dir: direction});
 
@@ -93,7 +96,7 @@ module.exports = function(io) {
 
 
         socket.on('overrideCommand', function(command) {
-            console.log("[MASTER] overwrideCommand: " + JSON.stringify(command));
+            console.log("overwrideCommand: " + JSON.stringify(command));
             command.isMaster = true;
 
             socket.to('ArCommands').emit('ArTrueCommand', command);
@@ -102,7 +105,7 @@ module.exports = function(io) {
         });
 
         socket.on('overrideEnable', function(state) {
-            console.log("[MASTER] overrideEnable: " + state);
+            console.log("overrideEnable: " + state);
             redisPublisher.publish("enableSlaves", JSON.stringify(state));
         });
 

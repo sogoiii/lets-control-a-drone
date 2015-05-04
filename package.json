@@ -1,6 +1,8 @@
 {
   "name": "quadCoptorController",
   "version": "0.1.0",
+  "email": "angello@vixlet.com",
+  "license" : "MIT",
   "private": false,
   "scripts": {
     "start": "node ./bin/slave"
