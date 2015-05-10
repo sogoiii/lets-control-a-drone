@@ -20,6 +20,16 @@ var config = {
             port: process.env.REDIS_PORT,
             password: process.env.REDIS_PASS
         }
+    },
+    network: {
+        internet: {
+            ESSID: process.env.INTERNET_ESSID || '',
+            wpa2Pass: process.env.WPA2_PASS || ''
+        },
+        drone: {
+            ESSID: process.env.DRONE_ESSID || '',
+            desiredIP: process.env.DRONE_DESIRED_IP || '192.168.1.1'
+        }
     }
 };
 

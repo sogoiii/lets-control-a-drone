@@ -8,8 +8,10 @@ var drone = spawn('node', ['bin/drone']);
 //given chunk, output to console.log
 var toConsoleLog = function(processName){
     return function(chunk){
-        console.log(processName + ' ' + chunk.toString('ascii'));
-    }   
+          var string = new Buffer(chunk).toString('utf8');
+          if(string.length < 1){return}
+          console.log(processName + ' ' + string);
+      }
 }
 
 //have output got to single standard Out
